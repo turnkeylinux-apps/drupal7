@@ -53,3 +53,18 @@ drush site-install standard -y \
 chown root:www-data $SETTINGS
 chmod 640 $SETTINGS
 
+# create welcome page
+WELCOME='<p>Please follow these steps to set up and start using your website:</p><ol><li><strong>Configure your website:</strong> To get started, log in as <b>admin</b> and visit the <a href=\"/admin\">administration section</a>, where you can customize and configure all aspects of your website.</li><li><strong>Start posting content:</strong> When ready, delete this welcome and <a href=\"/node/add\">create content</a> for your website.</li></ol><p>For more information, please refer to the <a href=\"http://www.turnkeylinux.org/drupal7\">TurnKey Drupal7 release notes</a>, <a href=\"/admin/help\">help section</a>, or the <a href=\"http://drupal.org/handbooks\">online Drupal handbooks</a>. You may also post at the <a href=\"http://drupal.org/forum\">Drupal forum</a>, or view the wide range of <a href=\"http://drupal.org/support\">other support options</a> available.</p>'
+
+$MYSQL_BATCH --database=$DB_NAME --execute "INSERT INTO node VALUES ('1', '1', 'page', 'und', 'Welcome to TurnKey Drupal 7', '1', '1', '1334908018', '1334908036', '1', '1', '0', '0', '0');"
+
+$MYSQL_BATCH --database=$DB_NAME --execute "INSERT INTO node_revision VALUES ('1', '1', '1', 'Welcome to TurnKey Drupal', '', '1334908036', '1', '1', '1', '0');"
+
+$MYSQL_BATCH --database=$DB_NAME --execute "INSERT INTO field_data_body VALUES ('node', 'page', '0', '1', '1', 'und', '0', '$WELCOME', '$WELCOME', 'filtered_html');"
+
+$MYSQL_BATCH --database=$DB_NAME --execute "INSERT INTO field_revision_body VALUES ('node', 'page', '0', '1', '1', 'und', '0', '$WELCOME', '$WELCOME', 'filtered_html');"
+
+$MYSQL_BATCH --database=$DB_NAME --execute "INSERT INTO node_comment_statistics VALUES ('1', '0', '1334908036', '', '1', '0');"
+
+/etc/init.d/mysql stop
+

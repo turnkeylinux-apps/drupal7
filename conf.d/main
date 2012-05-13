@@ -1,6 +1,14 @@
 #!/bin/sh -ex
 
+DB_NAME=drupal7
+DB_USER=drupal7
+DB_PASS=$(mcookie)
+
+ADMIN_NAME=admin
+ADMIN_PASS=turnkey
+
 SRC=/usr/local/src
+WEBROOT=/var/www/drupal7
 
 # install and setup drush
 tar -zxf $SRC/drush-* -C /usr/local/share/
@@ -17,4 +25,31 @@ cat > /etc/drush/drushrc.php << EOF
 EOF
 
 ln -s /usr/local/share/drush/drush /usr/local/bin/drush
+
+# unpack drupal7 and configure
+tar -zxf $SRC/drupal-*.tar.gz -C /var/www/
+mv /var/www/drupal-* $WEBROOT
+chown -R root:root $WEBROOT
+chmod 640 $WEBROOT/*.txt
+rm $SRC/drupal-*
+
+mkdir -p $WEBROOT/sites/default/files
+mkdir -p $WEBROOT/sites/default/files/styles
+chown -R www-data:www-data $WEBROOT/sites/default/files
+
+SETTINGS=$WEBROOT/sites/default/settings.php
+cp $WEBROOT/sites/default/default.settings.php $SETTINGS
+chown www-data:www-data $SETTINGS
+
+/etc/init.d/mysql start
+MYSQL_BATCH="mysql --user=root --password=$MYSQL_PASS --batch"
+
+# setup drupal via drush
+drush site-install standard -y \
+    --account-name=$ADMIN_NAME \
+    --account-pass=$ADMIN_PASS \
+    --site-name="TurnKey Drupal7" --db-su=root --db-su-pw=$MYSQL_PASS --db-url=mysql://$DB_USER:$DB_PASS@localhost/$DB_NAME
+
+chown root:www-data $SETTINGS
+chmod 640 $SETTINGS
 

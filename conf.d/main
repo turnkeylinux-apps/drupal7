@@ -66,5 +66,8 @@ $MYSQL_BATCH --database=$DB_NAME --execute "INSERT INTO field_revision_body VALU
 
 $MYSQL_BATCH --database=$DB_NAME --execute "INSERT INTO node_comment_statistics VALUES ('1', '0', '1334908036', '', '1', '0');"
 
+# disable footer
+$MYSQL_BATCH --database=$DB_NAME --execute "UPDATE block SET region = '-1' WHERE delta = 'powered-by';"
+
 /etc/init.d/mysql stop
 

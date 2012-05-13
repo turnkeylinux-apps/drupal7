@@ -90,3 +90,35 @@ rm -f $SRC/ckeditor_*.tar.gz
 
 chown -R root:root $WEBROOT/sites/all
 
+# disable poor mans cron and setup drush cron
+cat >>$WEBROOT/sites/default/settings.php<< EOF
+
+/**
+ * Disable Poor Man's Cron:
+ *
+ * Drupal 7 enables the built-in Poor Man's Cron by default.
+ * Poor Man's Cron relies on site activity to trigger Drupal's cron,
+ * and is not well suited for low activity websites.
+ *
+ * We will use the Linux system cron and override Poor Man's Cron
+ * by setting the cron_safe_threshold to 0.
+ *
+ * To re-enable Poor Man's Cron:
+ *    Comment out (add a leading hash sign) the line below,
+ *    and the system cron in /etc/cron.d/drupal7.
+ */
+\$conf['cron_safe_threshold'] = 0;
+EOF
+
+CRON_DRUPAL=/etc/cron.hourly/drupal7
+cat >$CRON_DRUPAL<<EOF
+#!/bin/bash -e
+# Trigger drush cron
+# Alternatively Drupal's poor mans cron: sites/default/settings.php
+
+[ -x /usr/local/bin/drush ] || exit 0
+
+su www-data -c "/usr/local/bin/drush --quiet cron"
+EOF
+chmod +x $CRON_DRUPAL
+

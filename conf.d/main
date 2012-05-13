@@ -1,0 +1,20 @@
+#!/bin/sh -ex
+
+SRC=/usr/local/src
+
+# install and setup drush
+tar -zxf $SRC/drush-* -C /usr/local/share/
+rm $SRC/drush-*
+
+tar -zxf $SRC/Console_Table-* -C /usr/local/share/drush/lib/
+rm $SRC/Console_Table-*
+
+mkdir -p /etc/drush
+cat > /etc/drush/drushrc.php << EOF
+<?php
+// by default use the drupal root directory
+\$options['r'] = '$WEBROOT';
+EOF
+
+ln -s /usr/local/share/drush/drush /usr/local/bin/drush
+

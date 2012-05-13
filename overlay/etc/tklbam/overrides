@@ -1,0 +1,11 @@
+-mysql:drupal7/sessions
+-mysql:drupal7/cache
+-mysql:drupal7/cache_filter
+-mysql:drupal7/cache_menu
+-mysql:drupal7/cache_page
+-mysql:drupal7/cache_views
+-mysql:drupal7/devel_queries
+-mysql:drupal7/devel_times
+-mysql:drupal7/search_dataset
+-mysql:drupal7/search_index
+-mysql:drupal7/search_total

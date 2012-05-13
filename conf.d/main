@@ -122,3 +122,8 @@ su www-data -c "/usr/local/bin/drush --quiet cron"
 EOF
 chmod +x $CRON_DRUPAL
 
+# configure apache
+a2dissite default
+a2ensite drupal7
+a2enmod rewrite
+

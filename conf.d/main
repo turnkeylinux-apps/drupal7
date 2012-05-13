@@ -71,3 +71,22 @@ $MYSQL_BATCH --database=$DB_NAME --execute "UPDATE block SET region = '-1' WHERE
 
 /etc/init.d/mysql stop
 
+# unpack and configure modules
+MODULES_SRC=$SRC/modules
+MODULES_DST=$WEBROOT/sites/all/modules
+for module in $(ls $MODULES_SRC/*.tar.gz); do
+    tar -zxf $module -C $MODULES_DST
+done
+rm -rf $MODULES_SRC
+
+LIBRARIES_PATH=$WEBROOT/sites/all/libraries
+mkdir -p $LIBRARIES_PATH
+
+mkdir -p $LIBRARIES_PATH/getid3/
+ln -s /usr/share/php-getid3 $LIBRARIES_PATH/getid3/getid3
+
+tar -zxf $SRC/ckeditor_*.tar.gz -C $LIBRARIES_PATH
+rm -f $SRC/ckeditor_*.tar.gz
+
+chown -R root:root $WEBROOT/sites/all
+

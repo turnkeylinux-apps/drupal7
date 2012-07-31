@@ -1,0 +1,73 @@
+turnkey-drupal7-12.0 (1) turnkey; urgency=low
+
+  * Initial public release of TurnKey Drupal7, based on TKLPatch submitted
+    by John Carver.
+
+  * Installed from upstream tarball, includes support for inline upgrades.
+
+  * Set Drupal admin email and password on firstboot (convenience, security).
+
+  * Regenerates all secrets during installation / firstboot (security).
+
+  * Includes drush for command line administration and configuration.
+
+  * Replaced Drupal's poor-man-cron with drush cron.
+
+  * Includes many useful/popular drupal7 modules:
+
+    - devel
+    - views
+    - panels
+    - rules
+    - pathauto
+    - google_analytics
+    - backup_migrate
+    - recaptcha
+    - imageapi
+    - lightbox2
+    - getid3
+    - imce
+    - ckeditor
+    - jquery_ui
+    - transliteration
+    - tagadelic
+    - advanced_help
+    - admin_menu
+    - ctools
+    - globalredirect
+    - logintoboggan
+    - simpletest
+    - fivestart
+    - token
+    - webform
+    - email
+    - link
+    - date
+
+  * MySQL related:
+
+    - Set MySQL root password on firstboot (convenience, security).
+    - Force MySQL to use Unicode/UTF8.
+    - Includes PhpMyAdmin (listening on port 12322 - uses SSL).
+
+  * SSL support out of the box.
+
+  * Includes php-xcache PHP opcode cacher / optimizer (performance).
+
+  * Includes postfix MTA (bound to localhost) for sending of email (e.g.
+    password recovery). Also includes webmin postfix module for convenience.
+
+  * Major component versions
+
+    drupal          7.14 (upstream archive)
+    drush           7.x-5.1 (upstream archive)
+
+    apache2         2.2.16-6+squeeze7
+    mysql-server    5.1.63-0+squeeze1
+    phpmyadmin      4:3.3.7-7
+
+  * Note: Please refer to turnkey-core's changelog for changes common to all
+    appliances. Here we only describe changes specific to this appliance.
+
+ -- Alon Swartz <alon@turnkeylinux.org>  Wed, 01 Aug 2012 08:00:00 +0200
+

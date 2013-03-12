@@ -10,12 +10,12 @@ ADMIN_PASS=turnkey
 SRC=/usr/local/src
 WEBROOT=/var/www/drupal7
 
-# install and setup drush
-tar -zxf $SRC/drush-* -C /usr/local/share/
-rm $SRC/drush-*
+# set proxy settings
+[ "$FAB_HTTP_PROXY" ] && export HTTP_PROXY=$FAB_HTTP_PROXY
 
-tar -zxf $SRC/Console_Table-* -C /usr/local/share/drush/lib/
-rm $SRC/Console_Table-*
+# install drush and configure
+pear channel-discover pear.drush.org
+pear install drush/drush
 
 mkdir -p /etc/drush
 cat > /etc/drush/drushrc.php << EOF
@@ -24,27 +24,16 @@ cat > /etc/drush/drushrc.php << EOF
 \$options['r'] = '$WEBROOT';
 EOF
 
-ln -s /usr/local/share/drush/drush /usr/local/bin/drush
-
-# unpack drupal7 and configure
-tar -zxf $SRC/drupal-*.tar.gz -C /var/www/
-mv /var/www/drupal-* $WEBROOT
-chown -R root:root $WEBROOT
-chmod 640 $WEBROOT/*.txt
-rm $SRC/drupal-*
-
-mkdir -p $WEBROOT/sites/default/files
-mkdir -p $WEBROOT/sites/default/files/styles
-chown -R www-data:www-data $WEBROOT/sites/default/files
+# download latest drupal7 and install
+drush dl drupal-7 --destination=$(dirname $WEBROOT)
+mv $(dirname $WEBROOT)/drupal-7* $WEBROOT
 
 SETTINGS=$WEBROOT/sites/default/settings.php
 cp $WEBROOT/sites/default/default.settings.php $SETTINGS
 chown www-data:www-data $SETTINGS
 
 /etc/init.d/mysql start
-MYSQL_BATCH="mysql --user=root --password=$MYSQL_PASS --batch"
 
-# setup drupal via drush
 drush site-install standard -y \
     --account-name=$ADMIN_NAME \
     --account-pass=$ADMIN_PASS \
@@ -52,36 +41,12 @@ drush site-install standard -y \
 
 chown root:www-data $SETTINGS
 chmod 640 $SETTINGS
+chown -R www-data:www-data $WEBROOT/sites/default/files
 
-# create welcome page
-WELCOME='<p>Please follow these steps to set up and start using your website:</p><ol><li><strong>Configure your website:</strong> To get started, log in as <b>admin</b> and visit the <a href=\"/admin\">administration section</a>, where you can customize and configure all aspects of your website.</li><li><strong>Start posting content:</strong> When ready, delete this welcome and <a href=\"/node/add\">create content</a> for your website.</li></ol><p>For more information, please refer to the <a href=\"http://www.turnkeylinux.org/drupal7\">TurnKey Drupal7 release notes</a>, <a href=\"/admin/help\">help section</a>, or the <a href=\"http://drupal.org/handbooks\">online Drupal handbooks</a>. You may also post at the <a href=\"http://drupal.org/forum\">Drupal forum</a>, or view the wide range of <a href=\"http://drupal.org/support\">other support options</a> available.</p>'
-
-$MYSQL_BATCH --database=$DB_NAME --execute "INSERT INTO node VALUES ('1', '1', 'page', 'und', 'Welcome to TurnKey Drupal 7', '1', '1', '1334908018', '1334908036', '1', '1', '0', '0', '0');"
-
-$MYSQL_BATCH --database=$DB_NAME --execute "INSERT INTO node_revision VALUES ('1', '1', '1', 'Welcome to TurnKey Drupal', '', '1334908036', '1', '1', '1', '0');"
-
-$MYSQL_BATCH --database=$DB_NAME --execute "INSERT INTO field_data_body VALUES ('node', 'page', '0', '1', '1', 'und', '0', '$WELCOME', '$WELCOME', 'filtered_html');"
-
-$MYSQL_BATCH --database=$DB_NAME --execute "INSERT INTO field_revision_body VALUES ('node', 'page', '0', '1', '1', 'und', '0', '$WELCOME', '$WELCOME', 'filtered_html');"
-
-$MYSQL_BATCH --database=$DB_NAME --execute "INSERT INTO node_comment_statistics VALUES ('1', '0', '1334908036', '', '1', '0');"
-
-# disable footer
-$MYSQL_BATCH --database=$DB_NAME --execute "UPDATE block SET region = '-1' WHERE delta = 'powered-by';"
-
-/etc/init.d/mysql stop
-
-# unpack and configure modules
-MODULES_SRC=$SRC/modules
-MODULES_DST=$WEBROOT/sites/all/modules
-for module in $(ls $MODULES_SRC/*.tar.gz); do
-    tar -zxf $module -C $MODULES_DST
-done
-rm -rf $MODULES_SRC
+# download and install modules
+drush dl --default-major=7 panels backup_migrate devel ckeditor imce recaptcha pathauto globalredirect fivestar webform logintoboggan admin_menu tagadelic lightbox2 google_analytics advanced_help rules jquery_ui token email link date context migrate views features entity content_access variable ctools captcha votingapi i18n
 
 LIBRARIES_PATH=$WEBROOT/sites/all/libraries
-mkdir -p $LIBRARIES_PATH
-
 mkdir -p $LIBRARIES_PATH/getid3/
 ln -s /usr/share/php-getid3 $LIBRARIES_PATH/getid3/getid3
 
@@ -116,14 +81,37 @@ cat >$CRON_DRUPAL<<EOF
 # Trigger drush cron
 # Alternatively Drupal's poor mans cron: sites/default/settings.php
 
-[ -x /usr/local/bin/drush ] || exit 0
+[ -x /usr/bin/drush ] || exit 0
 
-su www-data -c "/usr/local/bin/drush --quiet cron"
+su www-data -c "/usr/bin/drush --quiet cron"
 EOF
 chmod +x $CRON_DRUPAL
+
+# create welcome page
+MYSQL_BATCH="mysql --user=root --password=$MYSQL_PASS --batch"
+
+WELCOME='<p>Please follow these steps to set up and start using your website:</p><ol><li><strong>Configure your website:</strong> To get started, log in as <b>admin</b> and visit the <a href=\"/admin\">administration section</a>, where you can customize and configure all aspects of your website.</li><li><strong>Start posting content:</strong> When ready, delete this welcome and <a href=\"/node/add\">create content</a> for your website.</li></ol><p>For more information, please refer to the <a href=\"http://www.turnkeylinux.org/drupal7\">TurnKey Drupal7 release notes</a>, <a href=\"/admin/help\">help section</a>, or the <a href=\"http://drupal.org/handbooks\">online Drupal handbooks</a>. You may also post at the <a href=\"http://drupal.org/forum\">Drupal forum</a>, or view the wide range of <a href=\"http://drupal.org/support\">other support options</a> available.</p>'
+
+$MYSQL_BATCH --database=$DB_NAME --execute "INSERT INTO node VALUES ('1', '1', 'page', 'und', 'Welcome to TurnKey Drupal 7', '1', '1', '1334908018', '1334908036', '1', '1', '0', '0', '0');"
+
+$MYSQL_BATCH --database=$DB_NAME --execute "INSERT INTO node_revision VALUES ('1', '1', '1', 'Welcome to TurnKey Drupal', '', '1334908036', '1', '1', '1', '0');"
+
+$MYSQL_BATCH --database=$DB_NAME --execute "INSERT INTO field_data_body VALUES ('node', 'page', '0', '1', '1', 'und', '0', '$WELCOME', '$WELCOME', 'filtered_html');"
+
+$MYSQL_BATCH --database=$DB_NAME --execute "INSERT INTO field_revision_body VALUES ('node', 'page', '0', '1', '1', 'und', '0', '$WELCOME', '$WELCOME', 'filtered_html');"
+
+$MYSQL_BATCH --database=$DB_NAME --execute "INSERT INTO node_comment_statistics VALUES ('1', '0', '1334908036', '', '1', '0');"
+
+# disable footer
+$MYSQL_BATCH --database=$DB_NAME --execute "UPDATE block SET region = '-1' WHERE delta = 'powered-by';"
+
+/etc/init.d/mysql stop
 
 # configure apache
 a2dissite default
 a2ensite drupal7
 a2enmod rewrite
+
+# unset proxy settings
+unset HTTP_PROXY
 

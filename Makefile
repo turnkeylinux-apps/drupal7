@@ -1,5 +1,4 @@
-COMMON_OVERLAYS = ckeditor
-COMMON_CONF = apache-credit
+COMMON_CONF = ckeditor apache-credit
 
 CREDIT_ANCHORTEXT = Drupal 7 Appliance
 

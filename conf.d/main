@@ -111,7 +111,7 @@ $MYSQL_BATCH --database=$DB_NAME --execute "UPDATE block SET region = '-1' WHERE
 /etc/init.d/mysql stop
 
 # configure apache
-a2dissite default
+a2dissite 000-default
 a2ensite drupal7
 a2enmod rewrite
 

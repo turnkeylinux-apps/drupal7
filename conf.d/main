@@ -16,9 +16,16 @@ WEBROOT=/var/www/drupal7
 # increase php cli memory limit (for drush)
 sed -i "s|^memory_limit.*|memory_limit = 64M|" /etc/php5/cli/php.ini
 
-# install drush and configure
-pear channel-discover pear.drush.org
-pear install drush/drush
+# install composer
+curl -sS https://getcomposer.org/installer | php
+mv composer.phar /usr/local/bin/composer
+
+# install drush latest stable (7.x)
+git clone -b 7.x --depth 1 https://github.com/drush-ops/drush.git $SRC/drush
+cd $SRC/drush
+composer install
+ln -s $SRC/drush/drush /usr/local/bin/drush
+ln -s $SRC/drush/drush.complete.sh /etc/bash_completion.d/drush
 
 mkdir -p /etc/drush
 cat > /etc/drush/drushrc.php << EOF

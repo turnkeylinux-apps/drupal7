@@ -1,7 +1,7 @@
 #include <turnkey/base>
 #include <turnkey/lamp>
 
-php-pear            /* used for drush */
+php5-readline
 
 php5-gd
 php5-curl           /* dependency of drupal module simpletest */

@@ -91,9 +91,9 @@ cat >$CRON_DRUPAL<<EOF
 # Trigger drush cron
 # Alternatively Drupal's poor mans cron: sites/default/settings.php
 
-[ -x /usr/bin/drush ] || exit 0
+[ -x /usr/local/bin/drush ] || exit 0
 
-su www-data -c "/usr/bin/drush --quiet cron"
+su www-data -c "/usr/local/bin/drush --quiet cron"
 EOF
 chmod +x $CRON_DRUPAL
 

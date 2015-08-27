@@ -9,6 +9,7 @@ Option:
 
 import sys
 import getopt
+import inithooks_cache
 
 from dialog_wrapper import Dialog
 from mysqlconf import MySQL
@@ -53,6 +54,8 @@ def main():
             "Drupal7 Email",
             "Enter email address for the Drupal7 'admin' account.",
             "admin@example.com")
+
+    inithooks_cache.write('APP_EMAIL', email)
 
     m = MySQL()
     m.execute('UPDATE drupal7.users SET mail=\"%s\" WHERE name=\"admin\";' % email)

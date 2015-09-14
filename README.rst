@@ -67,7 +67,7 @@ Credentials *(passwords set at first boot)*
 -  Drupal 7: username **admin**
 
 .. _Drupal: http://drupal.org
-.. _TurnKey Core: http://www.turnkeylinux.org/core
+.. _TurnKey Core: https://www.turnkeylinux.org/core
 .. _Panels: http://drupal.org/project/panels
 .. _Backup and migrate: http://drupal.org/project/backup_migrate
 .. _Devel: http://drupal.org/project/devel

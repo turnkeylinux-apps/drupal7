@@ -1,0 +1,10 @@
+#!/bin/bash -e
+
+cd /var/www/drupal7
+TMPFILE=$(tempfile)
+trap "rm -f $TMPFILE" INT TERM EXIT
+drush pm-updatestatus --security-only > $TMPFILE
+
+if grep -q 'SECURITY UPDATE' $TMPFILE; then
+	cat $TMPFILE | mail -s 'Drupal security updates available' root
+fi

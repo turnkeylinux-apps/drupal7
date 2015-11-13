@@ -1,0 +1,1 @@
+0   0 * * *    www-data            [ -x /usr/local/sbin/drush-mail-securityupdates ] && /usr/local/sbin/drush-mail-securityupdates

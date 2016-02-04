@@ -58,7 +58,40 @@ chmod 640 $SETTINGS
 chown -R www-data:www-data $WEBROOT/sites/default/files
 
 # download and install modules
-drush dl --default-major=7 panels backup_migrate devel ckeditor imce recaptcha pathauto globalredirect fivestar webform logintoboggan admin_menu tagadelic lightbox2 google_analytics advanced_help rules jquery_ui token email link date context migrate views features entity content_access variable ctools captcha votingapi i18n
+drush dl --default-major=7 \
+	panels \
+	backup_migrate \
+	devel \
+	ckeditor \
+	imce \
+	recaptcha \
+	pathauto \
+	globalredirect \
+	fivestar \
+	webform \
+	logintoboggan \
+	admin_menu \
+	tagadelic \
+	lightbox2 \
+	google_analytics \
+	advanced_help \
+	rules \
+	jquery_ui \
+	token \
+	email \
+	link \
+	date \
+	context \
+	migrate \
+	views \
+	features \
+	entity \
+	content_access \
+	variable \
+	ctools \
+	captcha \
+	votingapi \
+	i18n
 
 LIBRARIES_PATH=$WEBROOT/sites/all/libraries
 mkdir -p $LIBRARIES_PATH/getid3/

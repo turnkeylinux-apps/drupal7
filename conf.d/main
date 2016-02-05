@@ -112,9 +112,12 @@ drush dis -y \
 
 drush cc all
 
+# configure D7 3rd party libraries path
 LIBRARIES_PATH=$WEBROOT/sites/all/libraries
-mkdir -p $LIBRARIES_PATH/getid3/
-ln -s /usr/share/php-getid3 $LIBRARIES_PATH/getid3/getid3
+mkdir -p $LIBRARIES_PATH
+
+# link jquery-colorbox for colorbox module
+ln -s /usr/share/javascript/jquery-colorbox/ $LIBRARIES_PATH/colorbox
 
 tar -zxf $SRC/ckeditor_*.tar.gz -C $LIBRARIES_PATH
 rm -f $SRC/ckeditor_*.tar.gz

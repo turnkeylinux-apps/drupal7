@@ -1,3 +1,21 @@
+turnkey-drupal7-14.1 (1) turnkey; urgency=low
+
+  * Drupal7:
+
+    - Latest stable version of Drush v7.x (installed via composer at build time).
+    - Latest version of Drupal 7 installed via Drush.
+    - Fixed cron (closes #559).
+    - Removed php5-xcache (#untracked-bug)
+    - Changed included modules as per recommendation of Mike Stiv (drupal ninja).
+    - Latest versions of modules & dependencies installed (& some enabled).
+    - Removed superfluous dependencies.
+    - Increased PHP memory limits for both cli & web (#untracked-bug)
+
+  * Note: Please refer to turnkey-core's changelog for changes common to all
+    appliances. Here we only describe changes specific to this appliance.
+
+ -- Jeremy Davis <jeremy@turnkeylinux.org>  Fri, 05 Feb 2016 18:11:26 +1100
+
 turnkey-drupal7-14.0 (1) turnkey; urgency=low                                                         
 
   * Drupal7:

@@ -17,8 +17,9 @@ WEBROOT=/var/www/drupal7
 # set proxy settings
 [ "$FAB_HTTP_PROXY" ] && export HTTP_PROXY=$FAB_HTTP_PROXY
 
-# increase php cli memory limit (for drush)
+# increase php cli & apache memory limits (cli for drush)
 sed -i "s|^memory_limit.*|memory_limit = 76M|" /etc/php5/cli/php.ini
+sed -i "s|^memory_limit.*|memory_limit = 64M|" /etc/php5/apache2/php.ini
 
 # install composer
 curl -sS https://getcomposer.org/installer | php

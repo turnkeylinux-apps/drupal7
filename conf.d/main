@@ -14,7 +14,7 @@ WEBROOT=/var/www/drupal7
 [ "$FAB_HTTP_PROXY" ] && export HTTP_PROXY=$FAB_HTTP_PROXY
 
 # increase php cli memory limit (for drush)
-sed -i "s|^memory_limit.*|memory_limit = 64M|" /etc/php5/cli/php.ini
+sed -i "s|^memory_limit.*|memory_limit = 76M|" /etc/php5/cli/php.ini
 
 # install composer
 curl -sS https://getcomposer.org/installer | php
@@ -57,7 +57,7 @@ chown root:www-data $SETTINGS
 chmod 640 $SETTINGS
 chown -R www-data:www-data $WEBROOT/sites/default/files
 
-# download and install modules
+# download, install and enable modules
 drush dl --default-major=7 \
 	admin_menu \
 	admin_views \
@@ -65,16 +65,48 @@ drush dl --default-major=7 \
 	backup_migrate \
 	ckeditor \
 	colorbox \
+	ctools \
+	entity \
 	field_group \
 	globalredirect \
 	google_analytics \
 	honeypot \
+	i18n \
 	imce \
+	libraries \
 	module_filter \
+	panels \
 	pathauto \
 	rules \
 	token \
-	views
+	variable \
+	views \
+	views_bulk_operations
+
+drush en -y \
+	actions_permissions \
+	admin_menu \
+	admin_menu_toolbar \
+	admin_views \
+	module_filter \
+	ctools \
+	advanced_help \
+	backup_migrate \
+	entity \
+	pathauto \
+	token \
+	globalredirect \
+	honeypot \
+	googleanalytics \
+	ckeditor \
+	views \
+	views_bulk_operations \
+	views_ui
+
+drush dis -y \
+	toolbar
+
+drush cc all
 
 LIBRARIES_PATH=$WEBROOT/sites/all/libraries
 mkdir -p $LIBRARIES_PATH/getid3/

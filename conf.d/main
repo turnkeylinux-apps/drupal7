@@ -1,5 +1,9 @@
 #!/bin/sh -ex
 
+# remove php5-xcache (#untracked-bug)
+apt-get purge php5-xcache -y
+rm -f /etc/php5/cli/conf.d/20-xcache.ini
+
 DB_NAME=drupal7
 DB_USER=drupal7
 DB_PASS=$(mcookie)
@@ -13,14 +17,15 @@ WEBROOT=/var/www/drupal7
 # set proxy settings
 [ "$FAB_HTTP_PROXY" ] && export HTTP_PROXY=$FAB_HTTP_PROXY
 
-# increase php cli memory limit (for drush)
-sed -i "s|^memory_limit.*|memory_limit = 64M|" /etc/php5/cli/php.ini
+# increase php cli & apache memory limits (cli for drush)
+sed -i "s|^memory_limit.*|memory_limit = 76M|" /etc/php5/cli/php.ini
+sed -i "s|^memory_limit.*|memory_limit = 64M|" /etc/php5/apache2/php.ini
 
 # install composer
 curl -sS https://getcomposer.org/installer | php
 mv composer.phar /usr/local/bin/composer
 
-# install drush latest stable (7.x)
+# install drush latest 7.x
 git clone -b 7.x --depth 1 https://github.com/drush-ops/drush.git $SRC/drush
 cd $SRC/drush
 composer install
@@ -33,6 +38,10 @@ cat > /etc/drush/drushrc.php << EOF
 // by default use the drupal root directory
 \$options['r'] = '$WEBROOT';
 EOF
+
+# create drush user (for cron jobs)
+adduser --disabled-password --no-create-home --gecos "Drush user" drushuser
+adduser drushuser www-data
 
 # download latest drupal7 and install
 drush dl drupal-7 --destination=$(dirname $WEBROOT)
@@ -53,12 +62,63 @@ chown root:www-data $SETTINGS
 chmod 640 $SETTINGS
 chown -R www-data:www-data $WEBROOT/sites/default/files
 
-# download and install modules
-drush dl --default-major=7 panels backup_migrate devel ckeditor imce recaptcha pathauto globalredirect fivestar webform logintoboggan admin_menu tagadelic lightbox2 google_analytics advanced_help rules jquery_ui token email link date context migrate views features entity content_access variable ctools captcha votingapi i18n
+# download, install and enable modules
+drush dl --default-major=7 \
+	admin_menu \
+	admin_views \
+	advanced_help \
+	backup_migrate \
+	ckeditor \
+	colorbox \
+	ctools \
+	entity \
+	field_group \
+	globalredirect \
+	google_analytics \
+	honeypot \
+	i18n \
+	imce \
+	libraries \
+	module_filter \
+	panels \
+	pathauto \
+	rules \
+	token \
+	variable \
+	views \
+	views_bulk_operations
 
+drush en -y \
+	actions_permissions \
+	admin_menu \
+	admin_menu_toolbar \
+	admin_views \
+	module_filter \
+	ctools \
+	advanced_help \
+	backup_migrate \
+	entity \
+	pathauto \
+	token \
+	globalredirect \
+	honeypot \
+	googleanalytics \
+	ckeditor \
+	views \
+	views_bulk_operations \
+	views_ui
+
+drush dis -y \
+	toolbar
+
+drush cc all
+
+# configure D7 3rd party libraries path
 LIBRARIES_PATH=$WEBROOT/sites/all/libraries
-mkdir -p $LIBRARIES_PATH/getid3/
-ln -s /usr/share/php-getid3 $LIBRARIES_PATH/getid3/getid3
+mkdir -p $LIBRARIES_PATH
+
+# link jquery-colorbox for colorbox module
+ln -s /usr/share/javascript/jquery-colorbox/ $LIBRARIES_PATH/colorbox
 
 tar -zxf $SRC/ckeditor_*.tar.gz -C $LIBRARIES_PATH
 rm -f $SRC/ckeditor_*.tar.gz
@@ -93,7 +153,7 @@ cat >$CRON_DRUPAL<<EOF
 
 [ -x /usr/local/bin/drush ] || exit 0
 
-su www-data -c "/usr/local/bin/drush --quiet cron"
+su drushuser -c "/usr/local/bin/drush --quiet cron"
 EOF
 chmod +x $CRON_DRUPAL
 

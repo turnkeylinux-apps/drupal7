@@ -39,10 +39,6 @@ cat > /etc/drush/drushrc.php << EOF
 \$options['r'] = '$WEBROOT';
 EOF
 
-# create drush user (for cron jobs)
-adduser --disabled-password --no-create-home --gecos "Drush user" drushuser
-adduser drushuser www-data
-
 # download latest drupal7 and install
 drush dl drupal-7 --destination=$(dirname $WEBROOT)
 mv $(dirname $WEBROOT)/drupal-7* $WEBROOT
@@ -153,7 +149,7 @@ cat >$CRON_DRUPAL<<EOF
 
 [ -x /usr/local/bin/drush ] || exit 0
 
-su drushuser -c "/usr/local/bin/drush --quiet cron"
+su www-data -s /bin/bash -c "/usr/local/bin/drush --quiet cron"
 EOF
 chmod +x $CRON_DRUPAL
 

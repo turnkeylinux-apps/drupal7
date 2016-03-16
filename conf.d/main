@@ -25,7 +25,7 @@ sed -i "s|^memory_limit.*|memory_limit = 64M|" /etc/php5/apache2/php.ini
 curl -sS https://getcomposer.org/installer | php
 mv composer.phar /usr/local/bin/composer
 
-# install drush latest 7.x
+# install drush latest stable (7.x)
 git clone -b 7.x --depth 1 https://github.com/drush-ops/drush.git $SRC/drush
 cd $SRC/drush
 composer install
@@ -38,10 +38,6 @@ cat > /etc/drush/drushrc.php << EOF
 // by default use the drupal root directory
 \$options['r'] = '$WEBROOT';
 EOF
-
-# create drush user (for cron jobs)
-adduser --disabled-password --no-create-home --gecos "Drush user" drushuser
-adduser drushuser www-data
 
 # download latest drupal7 and install
 drush dl drupal-7 --destination=$(dirname $WEBROOT)
@@ -153,7 +149,7 @@ cat >$CRON_DRUPAL<<EOF
 
 [ -x /usr/local/bin/drush ] || exit 0
 
-su drushuser -c "/usr/local/bin/drush --quiet cron"
+su www-data -c "/usr/local/bin/drush --quiet cron"
 EOF
 chmod +x $CRON_DRUPAL
 

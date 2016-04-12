@@ -1,9 +1,5 @@
 #!/bin/sh -ex
 
-# remove php5-xcache (#untracked-bug)
-apt-get purge php5-xcache -y
-rm -f /etc/php5/cli/conf.d/20-xcache.ini
-
 DB_NAME=drupal7
 DB_USER=drupal7
 DB_PASS=$(mcookie)

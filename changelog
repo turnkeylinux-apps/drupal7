@@ -1,3 +1,18 @@
+turnkey-drupal7-14.2 (1) turnkey; urgency=low
+
+  * Updated Drupal7 to latest stable upstream (via drush).
+
+  * Updated Drush to latest stable relevant version.
+
+  * Updated Adminer to 4.2.5
+
+  * Installed security updates.
+
+  * Note: Please refer to turnkey-core's changelog for changes common to all
+    appliances. Here we only describe changes specific to this appliance.
+
+ -- Jeremy Davis <jeremy@turnkeylinux.org>  Wed, 19 Apr 2017 15:41:40 +1000
+
 turnkey-drupal7-14.1 (1) turnkey; urgency=low
 
   * Drupal7:

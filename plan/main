@@ -1,10 +1,10 @@
 #include <turnkey/base>
 #include <turnkey/lamp>
 
-php5-readline
+php-readline
 
-php5-gd
-libssh2-php		/* support inline updates */
+php-gd
+php-ssh2		/* support inline updates */
 libjs-jquery-colorbox 	/* dependency of drupal module Colorbox */
-php5-gmp		/* optimizes performance of OpenID Math library */
-
+php-gmp		/* optimizes performance of OpenID Math library */
+php-xml

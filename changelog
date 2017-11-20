@@ -1,4 +1,4 @@
-turnkey-drupal7-15 (1) turnkey; urgency=low
+turnkey-drupal7-15.0 (1) turnkey; urgency=low
 
   * Install Adminer directly from stretch/main repo
 

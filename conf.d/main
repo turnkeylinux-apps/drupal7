@@ -39,7 +39,7 @@ SETTINGS=$WEBROOT/sites/default/settings.php
 cp $WEBROOT/sites/default/default.settings.php $SETTINGS
 chown www-data:www-data $SETTINGS
 
-/etc/init.d/mysql start
+service mysql start
 
 drush site-install standard -y \
     --account-name=$ADMIN_NAME \
@@ -163,7 +163,7 @@ $MYSQL_BATCH --database=$DB_NAME --execute "INSERT INTO node_comment_statistics 
 # disable footer
 $MYSQL_BATCH --database=$DB_NAME --execute "UPDATE block SET region = '-1' WHERE delta = 'powered-by';"
 
-/etc/init.d/mysql stop
+service mysql stop
 
 # configure apache
 a2dissite 000-default

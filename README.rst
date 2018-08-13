@@ -74,7 +74,7 @@ Supervised Manual Drupal Update
 -------------------------------
 
 It is possible to check for and install updates from the Drupal Admin 
-UI:: **Admin > Reports > Avaialble Updates**
+UI:: **Admin > Reports > Available Updates**
 
 Or from the command line::
 

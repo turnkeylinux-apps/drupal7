@@ -1,3 +1,10 @@
+turnkey-drupal7-15.1 (1) turnkey; urgency=low
+
+  * Rebuilt to include Drupal 7.60 due to security issue(s) described in
+    SA-CORE-2018-006 - https://www.drupal.org/sa-core-2018-006
+
+ -- Jeremy Davis <jeremy@turnkeylinux.org>  Thu, 18 Oct 2018 10:37:23 +1100
+
 turnkey-drupal7-15.0 (1) turnkey; urgency=low
 
   * Updated Drupal7 to latest stable upstream (via drush)
@@ -56,7 +63,7 @@ turnkey-drupal7-14.1 (1) turnkey; urgency=low
 
  -- Jeremy Davis <jeremy@turnkeylinux.org>  Fri, 05 Feb 2016 18:11:26 +1100
 
-turnkey-drupal7-14.0 (1) turnkey; urgency=low                                                         
+turnkey-drupal7-14.0 (1) turnkey; urgency=low
 
   * Drupal7:
 

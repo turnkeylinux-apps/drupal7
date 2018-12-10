@@ -1,5 +1,7 @@
 turnkey-drupal7-15.2 (1) turnkey; urgency=low
 
+  * Updated Drupal7 to latest upstream version - 7.61.
+
   * Rebuild to resolve inadvertant removal of mariadb during sec-updates
     - part of #1246.
 

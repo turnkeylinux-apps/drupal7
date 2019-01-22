@@ -1,3 +1,9 @@
+turnkey-drupal7-15.3 (1) turnkey; urgency=low
+
+  * Update Drupal7 to latest upstream version - 7.63. 
+
+ -- Jeremy Davis <jeremy@turnkeylinux.org>  Tue, 22 Jan 2019 16:32:22 +1100
+
 turnkey-drupal7-15.2 (1) turnkey; urgency=low
 
   * Updated Drupal7 to latest upstream version - 7.61.

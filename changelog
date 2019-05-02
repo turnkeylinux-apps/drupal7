@@ -1,3 +1,10 @@
+turnkey-drupal7-15.4 (1) turnkey; urgency=low
+
+  * Update Drupal7 to latest upstream version - 7.66. Resolves
+    SA-CORE-2019-006 - Moderately critical security issue(s).
+
+ -- Jeremy Davis <jeremy@turnkeylinux.org>  Thu, 02 May 2019 14:27:44 +1000
+
 turnkey-drupal7-15.3 (1) turnkey; urgency=low
 
   * Update Drupal7 to latest upstream version - 7.65. 

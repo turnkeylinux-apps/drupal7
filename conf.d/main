@@ -35,9 +35,38 @@ EOF
 drush dl drupal-7 --destination=$(dirname $WEBROOT)
 mv $(dirname $WEBROOT)/drupal-7* $WEBROOT
 
-SETTINGS=$WEBROOT/sites/default/settings.php
-cp $WEBROOT/sites/default/default.settings.php $SETTINGS
-chown www-data:www-data $SETTINGS
+CONF=$WEBROOT/sites/default/settings.php
+DEFAULT_CONF=$WEBROOT/sites/default/default.settings.php
+
+# use python to create settings.php file with utf8mb DB encoding
+python3 - <<EOF
+
+db_config = '''\$databases['default']['default'] = array(
+    'database' => '$DB_NAME',
+    'username' => '$DB_USER',
+    'password' => '$DB_PASS',
+    'host' => 'localhost',
+    'port' => '',
+    'driver' => 'mysql',
+    'charset' => 'utf8mb4',
+    'collation' => 'utf8mb4_general_ci',
+    'prefix' => '',
+);'''
+
+config = []
+with open('$DEFAULT_CONF', 'r') as fob:
+    for line in fob.readlines():
+        line = line.strip('\n')
+        if line.strip() == '\$databases = array();':
+            config.extend(db_config.split('\n'))
+        else:
+            config.append(line)
+
+with open('$CONF', 'w') as fob:
+    fob.write('\n'.join(config))
+EOF
+
+chown www-data:www-data $CONF
 
 service mysql start
 
@@ -46,8 +75,8 @@ drush site-install standard -y \
     --account-pass=$ADMIN_PASS \
     --site-name="TurnKey Drupal7" --db-su=root --db-su-pw=$MYSQL_PASS --db-url=mysql://$DB_USER:$DB_PASS@localhost/$DB_NAME
 
-chown root:www-data $SETTINGS
-chmod 640 $SETTINGS
+chown root:www-data $CONF
+chmod 640 $CONF
 chown -R www-data:www-data $WEBROOT/sites/default/files
 
 # download, install and enable modules
@@ -172,4 +201,3 @@ a2enmod rewrite
 
 # unset proxy settings
 unset HTTP_PROXY
-

@@ -4,7 +4,8 @@
 php-readline
 
 php-gd
-php-ssh2		/* support inline updates */
+php-ssh2                /* support inline updates */
 libjs-jquery-colorbox 	/* dependency of drupal module Colorbox */
-php-gmp		/* optimizes performance of OpenID Math library */
+php-gmp		            /* optimizes performance of OpenID Math library */
 php-xml
+php-mbstring            /* improved multibyte utf-8 string support */

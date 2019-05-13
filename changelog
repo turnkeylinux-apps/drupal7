@@ -5,7 +5,14 @@ turnkey-drupal7-15.4 (1) turnkey; urgency=low
     - SA-CORE-2019-006 - Moderately critical security issue(s).
     - SA-CORE-2019-007 - Moderately critical security issue(s).
 
- -- Jeremy Davis <jeremy@turnkeylinux.org>  Thu, 09 May 2019 10:41:44 +1000
+  * Enable utf8-mb DB character encoding, so the full utf8 character set is
+    supported.
+
+  * Include php-mbstring package for improved full utf8 support.
+
+  * Include php-uploadprogress so upload progress bar is displayed.
+
+ -- Jeremy Davis <jeremy@turnkeylinux.org>  Mon, 13 May 2019 10:28:06 +1000
 
 turnkey-drupal7-15.3 (1) turnkey; urgency=low
 

@@ -14,11 +14,12 @@ WEBROOT=/var/www/drupal7
 [ "$FAB_HTTP_PROXY" ] && export HTTP_PROXY=$FAB_HTTP_PROXY
 
 # increase php cli & apache memory limits (cli for drush)
-sed -i "s|^memory_limit.*|memory_limit = 76M|" /etc/php/7.0/cli/php.ini
-sed -i "s|^memory_limit.*|memory_limit = 64M|" /etc/php/7.0/apache2/php.ini
+sed -i "s|^memory_limit.*|memory_limit = 76M|" /etc/php/7.3/cli/php.ini
+sed -i "s|^memory_limit.*|memory_limit = 64M|" /etc/php/7.3/apache2/php.ini
 
-# install drush latest 7.x
-git clone -b 7.x --depth 1 https://github.com/drush-ops/drush.git $SRC/drush
+# install drush latest 8.x
+# (9.x can only be installed as a Drupal8/9 dependency)
+git clone -b 8.x --depth 1 https://github.com/drush-ops/drush.git $SRC/drush
 cd $SRC/drush
 composer install
 ln -s $SRC/drush/drush /usr/local/bin/drush
@@ -61,6 +62,7 @@ with open('$DEFAULT_CONF', 'r') as fob:
             config.extend(db_config.split('\n'))
         else:
             config.append(line)
+config.append('') # ensure new line at end of conf
 
 with open('$CONF', 'w') as fob:
     fob.write('\n'.join(config))
@@ -70,10 +72,16 @@ chown www-data:www-data $CONF
 
 service mysql start
 
+MYSQL_BATCH="mysql --user=root --password=$MYSQL_PASS --batch"
+MYSQL_ADMIN="mysqladmin --user=root"
+
+$MYSQL_ADMIN create $DB_NAME
+$MYSQL_BATCH --execute "grant all privileges on $DB_NAME.* to $DB_USER@localhost identified by '$DB_PASS'; flush privileges;"
+
 drush site-install standard -y \
     --account-name=$ADMIN_NAME \
     --account-pass=$ADMIN_PASS \
-    --site-name="TurnKey Drupal7" --db-su=root --db-su-pw=$MYSQL_PASS --db-url=mysql://$DB_USER:$DB_PASS@localhost/$DB_NAME
+    --site-name="TurnKey Drupal7"
 
 chown root:www-data $CONF
 chmod 640 $CONF

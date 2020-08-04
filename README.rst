@@ -93,25 +93,24 @@ Credentials *(passwords set at first boot)*
 -  Adminer: username **adminer**
 -  Drupal 7: username **admin**
 
-.. _Drupal: http://drupal.org
+.. _Drupal: https://drupal.org
 .. _TurnKey Core: https://www.turnkeylinux.org/core
 .. _Security Alerts: https://www.turnkeylinux.org/docs/automatic-security-alerts
-.. _Admin menu: http://drupal.org/project/admin_menu
+.. _Admin menu: https://drupal.org/project/admin_menu
 .. _Admin views: https://www.drupal.org/project/admin_views
-.. _Advanced\_help: http://drupal.org/project/advanced_help
-.. _Backup and migrate: http://drupal.org/project/backup_migrate
-.. _Ckeditor: http://drupal.org/project/ckeditor
+.. _Advanced\_help: https://drupal.org/project/advanced_help
+.. _Backup and migrate: https://drupal.org/project/backup_migrate
+.. _Ckeditor: https://drupal.org/project/ckeditor
 .. _Colorbox: https://www.drupal.org/project/colorbox
-.. _Drush: http://drupal.org/project/drush
+.. _Drush: https://drupal.org/project/drush
 .. _Field group: https://www.drupal.org/project/field_group
-.. _GlobalRedirect: http://drupal.org/project/globalredirect
-.. _Google analytics: http://drupal.org/project/google_analytics
+.. _GlobalRedirect: https://drupal.org/project/globalredirect
+.. _Google analytics: https://drupal.org/project/google_analytics
 .. _Honeypot: https://www.drupal.org/project/honeypot
-.. _Imce: http://drupal.org/project/imce
+.. _Imce: https://drupal.org/project/imce
 .. _Module filter: https://www.drupal.org/project/module_filter
-.. _PathAuto: http://drupal.org/project/pathauto
-.. _Rules: http://drupal.org/project/rules
-.. _Token: http://drupal.org/project/token
+.. _PathAuto: https://drupal.org/project/pathauto
+.. _Rules: https://drupal.org/project/rules
+.. _Token: https://drupal.org/project/token
 .. _Views: https://www.drupal.org/project/views
-.. _Adminer: http://www.adminer.org
-
+.. _Adminer: https://www.adminer.org

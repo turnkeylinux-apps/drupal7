@@ -1,0 +1,9 @@
+#!/bin/bash -e
+
+[[ -z "$DEBUG" ]] || set -x
+
+export DRUSH_USER="${DRUSH_USER:-www-data}"
+
+COMMAND="drush $@"
+
+runuser $DRUSH_USER -s /bin/bash -c "$COMMAND"

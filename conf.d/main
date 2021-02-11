@@ -9,6 +9,7 @@ ADMIN_PASS=turnkey
 
 SRC=/usr/local/src
 WEBROOT=/var/www/drupal7
+USER=www-data
 
 # set proxy settings
 [ "$FAB_HTTP_PROXY" ] && export HTTP_PROXY=$FAB_HTTP_PROXY
@@ -20,8 +21,9 @@ sed -i "s|^memory_limit.*|memory_limit = 64M|" /etc/php/7.3/apache2/php.ini
 # install drush latest 8.x
 # (9.x can only be installed as a Drupal8/9 dependency)
 git clone -b 8.x --depth 1 https://github.com/drush-ops/drush.git $SRC/drush
+chown -R $USER:$USER $SRC/drush
 cd $SRC/drush
-composer install
+turnkey-composer install --no-interaction
 ln -s $SRC/drush/drush /usr/local/bin/drush
 ln -s $SRC/drush/drush.complete.sh /etc/bash_completion.d/drush
 
@@ -33,8 +35,12 @@ cat > /etc/drush/drushrc.php << EOF
 EOF
 
 # download latest drupal7 and install
-drush dl drupal-7 --destination=$(dirname $WEBROOT)
-mv $(dirname $WEBROOT)/drupal-7* $WEBROOT
+TMP_DIR=$(dirname $WEBROOT)/tmp
+mkdir -p $TMP_DIR $WEBROOT
+chown -R $USER:$USER $TMP_DIR $WEBROOT
+turnkey-drush dl drupal-7 --destination=$TMP_DIR
+mv $TMP_DIR/drupal-7*/* $WEBROOT
+rm -rf $TMP_DIR
 
 CONF=$WEBROOT/sites/default/settings.php
 DEFAULT_CONF=$WEBROOT/sites/default/default.settings.php
@@ -68,27 +74,23 @@ with open('$CONF', 'w') as fob:
     fob.write('\n'.join(config))
 EOF
 
-chown www-data:www-data $CONF
+chown $USER:$USER $CONF
 
 service mysql start
 
-MYSQL_BATCH="mysql --user=root --password=$MYSQL_PASS --batch"
-MYSQL_ADMIN="mysqladmin --user=root"
+mysqladmin create $DB_NAME
+mysql --batch --execute "grant all privileges on $DB_NAME.* to $DB_USER@localhost identified by '$DB_PASS'; flush privileges;"
 
-$MYSQL_ADMIN create $DB_NAME
-$MYSQL_BATCH --execute "grant all privileges on $DB_NAME.* to $DB_USER@localhost identified by '$DB_PASS'; flush privileges;"
-
-drush site-install standard -y \
+turnkey-drush site-install standard -y \
     --account-name=$ADMIN_NAME \
     --account-pass=$ADMIN_PASS \
     --site-name="TurnKey Drupal7"
 
-chown root:www-data $CONF
 chmod 640 $CONF
-chown -R www-data:www-data $WEBROOT/sites/default/files
+chown -R $USER:$USER $WEBROOT/sites/default/files
 
 # download, install and enable modules
-drush dl --default-major=7 \
+turnkey-drush dl --default-major=7 \
 	admin_menu \
 	admin_views \
 	advanced_help \
@@ -113,7 +115,7 @@ drush dl --default-major=7 \
 	views \
 	views_bulk_operations
 
-drush en -y \
+turnkey-drush en -y \
 	actions_permissions \
 	admin_menu \
 	admin_menu_toolbar \
@@ -133,10 +135,10 @@ drush en -y \
 	views_bulk_operations \
 	views_ui
 
-drush dis -y \
+turnkey-drush dis -y \
 	toolbar
 
-drush cc all
+turnkey-drush cc all
 
 # configure D7 3rd party libraries path
 LIBRARIES_PATH=$WEBROOT/sites/all/libraries
@@ -147,8 +149,6 @@ ln -s /usr/share/javascript/jquery-colorbox/ $LIBRARIES_PATH/colorbox
 
 tar -zxf $SRC/ckeditor_*.tar.gz -C $LIBRARIES_PATH
 rm -f $SRC/ckeditor_*.tar.gz
-
-chown -R root:root $WEBROOT/sites/all
 
 # disable poor mans cron and setup drush cron
 cat >>$WEBROOT/sites/default/settings.php<< EOF
@@ -169,6 +169,8 @@ cat >>$WEBROOT/sites/default/settings.php<< EOF
  */
 \$conf['cron_safe_threshold'] = 0;
 EOF
+
+chown -R $USER:$USER $WEBROOT
 
 CRON_DRUPAL=/etc/cron.hourly/drupal7
 cat >$CRON_DRUPAL<<EOF

@@ -33,7 +33,7 @@ and on top of that:
    - `Advanced\_help`_: Improves the Drupal help system.
    - `Backup and migrate`_: Backup and restore your Drupal site
      on-demand or on a schedule.
-   - `Ckeditor`_: Enables CKeditor (a WYSIWYG editor) instead of plain
+   - `CKEditor`_: Enables CKEditor (a WYSIWYG editor) instead of plain
      text fields.
    - `Colorbox`_: Light-weight customizable plugin to provide overlayed 
      images (replaces previous inclusion of Lightbox2).
@@ -100,7 +100,7 @@ Credentials *(passwords set at first boot)*
 .. _Admin views: https://www.drupal.org/project/admin_views
 .. _Advanced\_help: https://drupal.org/project/advanced_help
 .. _Backup and migrate: https://drupal.org/project/backup_migrate
-.. _Ckeditor: https://drupal.org/project/ckeditor
+.. _CKEditor: https://drupal.org/project/ckeditor
 .. _Colorbox: https://www.drupal.org/project/colorbox
 .. _Drush: https://drupal.org/project/drush
 .. _Field group: https://www.drupal.org/project/field_group

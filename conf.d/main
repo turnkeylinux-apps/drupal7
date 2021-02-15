@@ -39,7 +39,8 @@ TMP_DIR=$(dirname $WEBROOT)/tmp
 mkdir -p $TMP_DIR $WEBROOT
 chown -R $USER:$USER $TMP_DIR $WEBROOT
 turnkey-drush dl drupal-7 --destination=$TMP_DIR
-mv $TMP_DIR/drupal-7*/* $WEBROOT
+# be sure to grab all files, inc dot files.
+cp -Rp $TMP_DIR/drupal-7*/. $WEBROOT/
 rm -rf $TMP_DIR
 
 CONF=$WEBROOT/sites/default/settings.php

@@ -57,8 +57,8 @@ def main():
     inithooks_cache.write('APP_EMAIL', email)
 
     m = MySQL()
-    m.execute('UPDATE drupal7.users SET mail=\"%s\" WHERE name=\"admin\";' % email)
-    m.execute('UPDATE drupal7.users SET init=\"%s\" WHERE name=\"admin\";' % email)
+    m.execute('UPDATE drupal7.users SET mail=%s WHERE name=\"admin\";', (email, ))
+    m.execute('UPDATE drupal7.users SET init=%s WHERE name=\"admin\";', (email, ))
     subprocess.run(["/usr/local/bin/drush", "variable-set", "site_mail", email])
     subprocess.run(["/usr/local/bin/drush", "variable-set", "update_notify_emails", email])
     subprocess.run(["/usr/local/bin/drush", "user-password", "admin", f"--password={password}"])

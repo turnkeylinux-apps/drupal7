@@ -59,9 +59,13 @@ def main():
     m = MySQL()
     m.execute('UPDATE drupal7.users SET mail=%s WHERE name=\"admin\";', (email, ))
     m.execute('UPDATE drupal7.users SET init=%s WHERE name=\"admin\";', (email, ))
-    subprocess.run(["/usr/local/bin/drush", "variable-set", "site_mail", email])
-    subprocess.run(["/usr/local/bin/drush", "variable-set", "update_notify_emails", email])
-    subprocess.run(["/usr/local/bin/drush", "user-password", "admin", f"--password={password}"])
+
+    # this would work with "normal" 'drush', but why not use 'turnkey-drush'!?
+    d7_dir = '/var/www/drupal7'
+    tkl_drush = "/usr/local/bin/turnkey-drush"
+    subprocess.run([tkl_drush, "variable-set", "site_mail", email], cwd=d7_dir)
+    subprocess.run([tkl_drush, "variable-set", "update_notify_emails", email], cwd=d7_dir)
+    subprocess.run([tkl_drush, "user-password", "admin", f"--password={password}"], cwd=d7_dir)
 
 if __name__ == "__main__":
     main()

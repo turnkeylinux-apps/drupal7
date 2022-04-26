@@ -15,8 +15,8 @@ USER=www-data
 [ "$FAB_HTTP_PROXY" ] && export HTTP_PROXY=$FAB_HTTP_PROXY
 
 # increase php cli & apache memory limits (cli for drush)
-sed -i "s|^memory_limit.*|memory_limit = 76M|" /etc/php/7.3/cli/php.ini
-sed -i "s|^memory_limit.*|memory_limit = 64M|" /etc/php/7.3/apache2/php.ini
+sed -i "s|^memory_limit.*|memory_limit = 76M|" /etc/php/7.4/cli/php.ini
+sed -i "s|^memory_limit.*|memory_limit = 64M|" /etc/php/7.4/apache2/php.ini
 
 # install drush latest 8.x
 # (9.x can only be installed as a Drupal8/9 dependency)

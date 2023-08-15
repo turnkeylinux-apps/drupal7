@@ -1,3 +1,9 @@
+turnkey-drupal7-18.0 (1) turnkey; urgency=low
+
+  * Update Drupal7 to latest upstream version - 7.98.
+
+ -- Stefan Davis <stefan@turnkeylinux.org>  Thu, 10 Aug 2023 04:11:30 +0000
+
 turnkey-drupal7-17.1 (1) turnkey; urgency=low
 
   * Updated all Debian packages to latest.

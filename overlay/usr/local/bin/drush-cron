@@ -1,0 +1,5 @@
+#!/bin/bash -e
+
+CRON_KEY="$(sed -n "/cron_key/s/.*= *'\(.*\)';/\1/p" /var/www/drupal7/sites/default/settings.php)"
+
+curl -s "http://localhost/cron.php?cron_key=$CRON_KEY" 

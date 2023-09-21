@@ -4,6 +4,6 @@
 
 export DRUSH_USER="${DRUSH_USER:-www-data}"
 
-COMMAND="drush $@"
+DRUSH="/usr/local/bin/drush"
 
-runuser $DRUSH_USER -s /bin/bash -c "$COMMAND"
+runuser $DRUSH_USER -s /bin/bash -c "$DRUSH $(printf '%q ' "$@")"

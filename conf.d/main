@@ -15,8 +15,8 @@ USER=www-data
 [ "$FAB_HTTP_PROXY" ] && export HTTP_PROXY=$FAB_HTTP_PROXY
 
 # increase php cli & apache memory limits (cli for drush)
-sed -i "s|^memory_limit.*|memory_limit = 76M|" /etc/php/7.4/cli/php.ini
-sed -i "s|^memory_limit.*|memory_limit = 64M|" /etc/php/7.4/apache2/php.ini
+sed -i "s|^memory_limit.*|memory_limit = 76M|" /etc/php/8.2/cli/php.ini
+sed -i "s|^memory_limit.*|memory_limit = 64M|" /etc/php/8.2/apache2/php.ini
 
 # install drush latest 8.x
 # (9.x can only be installed as a Drupal8/9 dependency)
@@ -74,6 +74,7 @@ config.append('') # ensure new line at end of conf
 with open('$CONF', 'w') as fob:
     fob.write('\n'.join(config))
 EOF
+echo "\$conf['cron_key'] = '$(mcookie)$(mcookie)';" >> "$CONF"
 
 chown $USER:$USER $CONF
 
@@ -124,7 +125,6 @@ turnkey-drush en -y \
 	module_filter \
 	ctools \
 	advanced_help \
-	backup_migrate \
 	entity \
 	pathauto \
 	token \
@@ -137,7 +137,10 @@ turnkey-drush en -y \
 	views_ui
 
 turnkey-drush dis -y \
+	backup_migrate \
 	toolbar
+
+# backup_migrate disabled due to deprecation warnings
 
 turnkey-drush cc all
 
@@ -181,7 +184,7 @@ cat >$CRON_DRUPAL<<EOF
 
 [ -x /usr/local/bin/drush ] || exit 0
 
-su www-data -s /bin/bash -c "/usr/local/bin/drush --quiet cron"
+su www-data -s /bin/bash -c "/usr/local/bin/drush-cron"
 EOF
 chmod +x $CRON_DRUPAL
 

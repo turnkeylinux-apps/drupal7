@@ -1,6 +1,10 @@
 Drupal 7 - Content Management Framework
 =======================================
 
+**IMPORTANT NOTE:** Drupal 7 is EOL Jan 2025 (extended life support). If you
+are starting a new Drupal project, DO **NOT** use this appliance. Instead use
+the `Drupal 10 appliance`_.
+
 `Drupal`_ is an open source content management platform licensed under
 the GPL. Equipped with a powerful blend of features, Drupal can support
 a variety of websites ranging from personal blogs, corporate brochures
@@ -93,6 +97,7 @@ Credentials *(passwords set at first boot)*
 -  Adminer: username **adminer**
 -  Drupal 7: username **admin**
 
+.. _Drupal 10 appliance: https://www.turnkeylinux.org/drupal10
 .. _Drupal: https://drupal.org
 .. _TurnKey Core: https://www.turnkeylinux.org/core
 .. _Security Alerts: https://www.turnkeylinux.org/docs/automatic-security-alerts

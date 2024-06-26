@@ -92,12 +92,14 @@ chmod 640 $CONF
 chown -R $USER:$USER $WEBROOT/sites/default/files
 
 # download, install and enable modules
+# Install specific "recommended version" of ckeditor
+# - otherwise asked interactively
 turnkey-drush dl --default-major=7 \
 	admin_menu \
 	admin_views \
 	advanced_help \
 	backup_migrate \
-	ckeditor \
+	ckeditor-7.x-1.23 \
 	colorbox \
 	ctools \
 	entity \

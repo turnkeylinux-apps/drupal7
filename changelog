@@ -1,31 +1,38 @@
 turnkey-drupal7-18.1 (1) turnkey; urgency=low
 
-  * Update Drupal 7 to lastest v7.101.
+  * v18.1 rebuild - includes latest Debian & TurnKey packages.
 
-  * Confconsole: bugfix broken DNS-01 Let's Encrypt challenge- closes #1876 &
-    #1895.
-    [Jeremy Davis <jeremy@turnkeylinux.org>]
+  * Update Drupal 7 to lastest v7.101.
 
   * Ensure hashfile includes URL to public key - closes #1864.
 
-  * Include webmin-logviewer module by default - closes #1866.
+  * Configuration console (confconsole) - v2.1.6:
+    - Bugfix broken DNS-01 Let's Encrypt challenge - closes #1876 & #1895.
+      Fixed in v2.1.5 - already included in some appliances.
+    - Let's Encrypt/Dehydrated - bugfix cron failure - closes #1962.
+    - General dehydrated-wrapper code cleanup - now passes shellcheck.
 
   * Web management console (webmin):
+    - Include webmin-logviewer module by default - closes #1866.
     - Upgraded webmin to v2.105.
     - Replace webmin-shell with webmin-xterm module by default - closes #1904.
 
-  * Set mod_evasive log location - makes debugging easier.
-    [ Jeremy Davis <jeremy@turnkeylinux.org> ]
+  * Reduce log noise by creating ntpsec log dir - closes #1952.
 
-  * Includes new 'tkl-upgrade-php' helper script - to allow easy update/change
-    of PHP version - closes #1892.
-    [Marcos Méndez @ POPSOLUTIONS <https://github.com/marcos-mendez>]
+  * Apache mod_evasive config improvements:
+    - Bump DOSPageCount from (default) 2 -> 5 - closes #1951.
+    - DOSLogDir - use default log dir & fix permissions - closes #1950.
+    - Add DOSWhitelist example - commented out.
+
+  * Include new 'tkl-update-php' script - to make updating/changing PHP
+    version easier for end users.
+    [Marcos Méndez @ POPSOLUTIONS <https://github.com/marcos-mendez>
 
   * DEV: Add support for setting max_execution_time & max_input_vars in
     php.ini via appliance Makefile (PHP_MAX_EXECUTION_TIME &
     PHP_MAX_INPUT_VARS).
 
- -- Jeremy Davis <jeremy@turnkeylinux.org>  Fri, 21 Jun 2024 04:34:02 +0000
+ -- Jeremy Davis <jeremy@turnkeylinux.org>  Fri, 05 Jul 2024 11:24:55 +0000
 
 turnkey-drupal7-18.0 (1) turnkey; urgency=low
 
